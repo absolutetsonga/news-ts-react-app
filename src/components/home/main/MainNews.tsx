@@ -5,7 +5,7 @@ import {getTime} from "../../../helpers/getTime";
 export const MainNews = () => {
     const {homeNewsData, firstHomeNewsData} = useHomeNewsData();
 
-    const [news, setNews] = useState({title: '', image: '', published: '', link: ''});
+    const [news, setNews] = useState({title: '', image: '', published: '', link: '', author: ''});
 
     return (
         <div className="flex flex-col-reverse sm:flex-row md:flex-col md:w-1/2 gap-4 md:gap-12">
@@ -13,8 +13,13 @@ export const MainNews = () => {
                 {firstHomeNewsData.map((el, index) => {
                     return (
                         <div key={index} className="flex flex-col gap-4 overflow-hidden">
-                            <p className="text-lg">{getTime(el.publishedAt)}</p>
-                            <a target="_blank" href={news.link ? news.link : el.url}><h2 className="text-[34px] md:text-[42px] leading-[120%] font-bold">{news.title ? `${news.title}...` : `${el.title?.substring(0, 100)}...`}</h2></a>
+                            <p className="text-lg">{getTime(news.published ? news.published : el.publishedAt)}</p>
+                            <p className="font-black text-2xl text-[#FF3B30]">{news.author ? news.author : el.source?.name}</p>
+                            <a target="_blank" href={news.link ? news.link : el.url}>
+                                <h2 className="text-[34px] md:text-[42px] leading-[120%] font-bold hover:text-[#007AFF] transition-all">
+                                    {news.title ? `${news.title}...` : `${el.title?.substring(0, 100)}...`}
+                                </h2>
+                            </a>
                             <a target="_blank" href={el.url} className="w-full">
                                 <img
                                     src={news.image ? news.image : el.urlToImage}
@@ -22,6 +27,7 @@ export const MainNews = () => {
                                     className={`w-full h-[400px] object-cover rounded-xl`}
                                 />
                             </a>
+
                         </div>
                     )
                 })}
@@ -35,7 +41,8 @@ export const MainNews = () => {
                                 title: el.title.substring(0, 100),
                                 image: el.urlToImage,
                                 published: el.publishedAt,
-                                link: el.url
+                                link: el.url,
+                                author: el.source.name,
                             })
                         }
 

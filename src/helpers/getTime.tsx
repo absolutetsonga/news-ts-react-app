@@ -1,32 +1,36 @@
-export const getTime = (postDate: string) => {
-    const addZero = (time: number) => {
-        return time < 10 ? `0${time}` : time
+export const getTime = (postDate: string, relativeTime = false) => {
+    const addZero = (value: number) => {
+        return value < 10 ? `0${value}` : value
     }
 
+    if (!postDate) return "Loading...";
     const date = new Date(postDate);
+    const now = new Date();
 
-    const options: Intl.DateTimeFormatOptions = {
-        weekday: 'long',
-        hour: 'numeric',
-        day: 'numeric',
-        minute: 'numeric',
-        hour12: false,
-        timeZone: 'UTC'
-    };
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'Asia/Almaty' }).format(date);
+    const hour = new Intl.DateTimeFormat('en-US', { hour: 'numeric', hour12: false, timeZone: 'Asia/Almaty' }).format(date);
+    const minute = new Intl.DateTimeFormat('en-US', { minute: 'numeric', timeZone: 'Asia/Almaty' }).format(date);
 
-    const now: Date = new Date();
     const diffInMillis: number = now.getTime() - date.getTime();
     const diffInMinutes: number = Math.floor((diffInMillis / (1000 * 60)) % 60);
     const diffInHours: number = Math.floor(diffInMillis / (1000 * 60 * 60) % 24);
     const diffInDays: number = Math.floor(diffInMillis / (1000 * 60 * 60 * 24));
 
-    const formattedDate = formatter.format(date);
+    if (relativeTime) return`${
+        diffInDays 
+            ? `${diffInDays === 1 
+                ? `${diffInDays} day` 
+                : `${diffInDays} days`} ago` 
+            : diffInHours 
+                ? `${diffInHours} hours ago` 
+                : `${diffInMinutes} minutes ago`
+    }`
 
-    return diffInDays === 0
-        ? `Today, ${addZero(diffInHours)}:${addZero(diffInMinutes)}`
-        : diffInDays === 1
-            ? `Yesterday, ${addZero(diffInHours)}:${addZero(diffInMinutes)}`
-            : formattedDate;
+    return `${weekdays[now.getDay()] === weekday ? "Today" : weekdays[now.getDay() - 1] === weekday ? 'Yesterday' : weekday}, ${hour}:${addZero(Number(minute))}`
+
+
+
+
 }

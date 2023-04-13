@@ -21,7 +21,7 @@ export const MoreCategories = () => {
                 />
             </div>
             <button className={`${position.flexCenter} flex-col`}>
-                <div className={`flex flex-col ${toggle ? 'opacity-0' : 'opacity-100'} transition-all duration-500 absolute top-20 mt-3 bg-white p-2 rounded-xl`}>
+                <div className={`flex flex-col ${toggle ? 'opacity-0 invisible' : 'opacity-100 visible'} transition-all duration-500 absolute top-20 mt-3 bg-white p-2 rounded-xl`}>
                     {firstNavCategories.slice(4).map((category, index) => {
                         const categoryURL = `/category/${category.toLowerCase()}`;
 

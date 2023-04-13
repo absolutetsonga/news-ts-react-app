@@ -8,7 +8,20 @@ export type HomeNewsType = {
         name: string
     }
     title: string
-    country: string
     url: string
     urlToImage: string
+}
+
+export type LastNewsType = {
+    source: {
+        id: string,
+        name: string
+    },
+    author: string,
+    title: string,
+    description: string,
+    url: string,
+    urlToImage: string,
+    publishedAt: string,
+    content: string
 }
